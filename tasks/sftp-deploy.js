@@ -31,6 +31,7 @@ module.exports = function(grunt) {
 	var progressLogger;
 	var transferred = 0;
 	var with_progress = true;
+	var verbose = false;
 
 	var cache;
 	var cacheEnabled;
@@ -100,7 +101,10 @@ module.exports = function(grunt) {
 					cb(err);
 				} else {
 					grunt.verbose.write(' done'.green + '\n');
-					if (with_progress) progressLogger.tick();
+					if (verbose)
+						log.write('\n' + ('Transferred ' + toFile).green + '\n');
+					if (with_progress)
+						progressLogger.tick();
 					transferred += parseInt(f_size / 1024);
 					cb(null);
 				}
@@ -240,6 +244,7 @@ module.exports = function(grunt) {
 		localSep = this.data.localSep ? this.data.localSep : '/';
 		var concurrency = parseInt(this.data.concurrency) || 4;
 		with_progress = this.data.progress || !grunt.option('verbose');
+		verbose = !!this.data.forceVerbose;
 
 		authVals = getAuthByKey(this.data.auth.authKey);
 		exclusions = this.data.exclusions || [];
